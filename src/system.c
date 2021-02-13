@@ -26,7 +26,7 @@ struct system_t system_init(void){
   system_net_init(&system);
   system_bat_init(&system);
 
-  ystem.buffer = NULL;
+  system.buffer = NULL;
   system.buffer_size = 0;
 
   system_refresh_info(&system);
@@ -132,4 +132,16 @@ static void system_cpu_init(struct system_t *system){
   //trier le tableau cpu par package et core IDS
 
   qsort(system->cpus, system->cpu_count, sizeof(struct cpu_t), cpu_cmp);
+}
+
+//refresh system cpu stats
+static void system_refresh_cpus(struct system_t *system){
+
+  //mettre à jour la frequence cpu courante
+
+  for(int i = 0; i < system->cpu_count; ++i){
+    struct cpu_t *cpu = &system->cpus[i];
+    lseek(cpu->cur_freq_fd, 0, SEEK_SET);
+    cpu->cur_freq = read_int_from_fd(cpu->cpu_freq_fd);
+  }
 }
