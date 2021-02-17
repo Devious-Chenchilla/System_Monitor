@@ -1,0 +1,1 @@
+/usr/bin/cc  -Wall -rdynamic CMakeFiles/smon.dir/src/main.c.o CMakeFiles/smon.dir/src/system.c.o -o smon 
