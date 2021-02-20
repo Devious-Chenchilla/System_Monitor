@@ -58,10 +58,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /var/lib/snapd/snap/cmake/775/bin/cmake
+CMAKE_COMMAND = /var/lib/snapd/snap/cmake/793/bin/cmake
 
 # The command to remove a file.
-RM = /var/lib/snapd/snap/cmake/775/bin/cmake -E rm -f
+RM = /var/lib/snapd/snap/cmake/793/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -78,19 +78,19 @@ CMAKE_BINARY_DIR = /home/uvsq/Bureau/Monitoring/Monitor-System/build
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/var/lib/snapd/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
 install/strip/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/var/lib/snapd/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/var/lib/snapd/snap/cmake/775/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/var/lib/snapd/snap/cmake/793/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -98,10 +98,22 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/var/lib/snapd/snap/cmake/793/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/var/lib/snapd/snap/cmake/793/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/var/lib/snapd/snap/cmake/793/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -122,26 +134,14 @@ list_install_components/fast: list_install_components
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/var/lib/snapd/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
 install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	/var/lib/snapd/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/var/lib/snapd/snap/cmake/775/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -176,17 +176,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named smon
+# Target rules for targets named aise
 
 # Build rule for target.
-smon: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 smon
-.PHONY : smon
+aise: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aise
+.PHONY : aise
 
 # fast build rule for target.
-smon/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/build
-.PHONY : smon/fast
+aise/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/build
+.PHONY : aise/fast
+
+src/functions.o: src/functions.c.o
+
+.PHONY : src/functions.o
+
+# target to build an object file
+src/functions.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/functions.c.o
+.PHONY : src/functions.c.o
+
+src/functions.i: src/functions.c.i
+
+.PHONY : src/functions.i
+
+# target to preprocess a source file
+src/functions.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/functions.c.i
+.PHONY : src/functions.c.i
+
+src/functions.s: src/functions.c.s
+
+.PHONY : src/functions.s
+
+# target to generate assembly for a file
+src/functions.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/functions.c.s
+.PHONY : src/functions.c.s
 
 src/main.o: src/main.c.o
 
@@ -194,7 +221,7 @@ src/main.o: src/main.c.o
 
 # target to build an object file
 src/main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/main.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/main.c.o
 .PHONY : src/main.c.o
 
 src/main.i: src/main.c.i
@@ -203,7 +230,7 @@ src/main.i: src/main.c.i
 
 # target to preprocess a source file
 src/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/main.c.i
 .PHONY : src/main.c.i
 
 src/main.s: src/main.c.s
@@ -212,7 +239,7 @@ src/main.s: src/main.c.s
 
 # target to generate assembly for a file
 src/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/main.c.s
 .PHONY : src/main.c.s
 
 src/system.o: src/system.c.o
@@ -221,7 +248,7 @@ src/system.o: src/system.c.o
 
 # target to build an object file
 src/system.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/system.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/system.c.o
 .PHONY : src/system.c.o
 
 src/system.i: src/system.c.i
@@ -230,7 +257,7 @@ src/system.i: src/system.c.i
 
 # target to preprocess a source file
 src/system.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/system.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/system.c.i
 .PHONY : src/system.c.i
 
 src/system.s: src/system.c.s
@@ -239,7 +266,7 @@ src/system.s: src/system.c.s
 
 # target to generate assembly for a file
 src/system.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/smon.dir/build.make CMakeFiles/smon.dir/src/system.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aise.dir/build.make CMakeFiles/aise.dir/src/system.c.s
 .PHONY : src/system.c.s
 
 # Help Target
@@ -254,7 +281,10 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... smon"
+	@echo "... aise"
+	@echo "... src/functions.o"
+	@echo "... src/functions.i"
+	@echo "... src/functions.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
