@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<signal.h>
+#include<string.h>
+
+volatile sig_atomic_t done = 0;
+void term(int signum){
+  done = 1;
+}
+
+int main(int argc, char ** argv){
+  struct sigaction action;
+  memset(&action, 0, sizeof(struct sigaction));
+  action.sa_handler = term;
+  sigaction(SIGTERM, &action, NULL);
+
+  int loop = 0;
+  while(!done){
+    int t = sleep(1);
+
+    while(t > 0){
+      printf("Loop run wasinterrupted with %d "
+	     "sec to go, finishing...\n", t);
+    }
+    printf("Finished loop run %d.\n", loop++);
+  }
+  printf("done.\n");
+
+  return 0;
+}
