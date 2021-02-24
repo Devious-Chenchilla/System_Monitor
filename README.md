@@ -1,4 +1,4 @@
-<img src="mon.png" align="right" />
+<img src="mon.jpg" align="right" />
 
 # Monitor-System
 
