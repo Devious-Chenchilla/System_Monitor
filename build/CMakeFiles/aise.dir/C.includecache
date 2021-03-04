@@ -6,23 +6,39 @@
 
 #IncludeRegexTransform: 
 
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/functions.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
 
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/struct_cpu.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_cpu.h
 
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/struct_disk.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_disk.h
 
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/system.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/system.h
 
-/home/uvsq/Bureau/Monitoring/Monitor-System/src/main.c
-../includes/system.h
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/system.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/src/functions.c
 ../includes/functions.h
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/functions.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/src/main.c
+../includes/system.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/system.h
+../includes/functions.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
 ../includes/struct_cpu.h
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/struct_cpu.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_cpu.h
 ../includes/struct_disk.h
-/home/uvsq/Bureau/Monitoring/Monitor-System/includes/struct_disk.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_disk.h
 stdio.h
 -
 stdlib.h
@@ -36,5 +52,27 @@ sys/select.h
 termios.h
 -
 signal.h
+-
+
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/src/system.c
+../includes/system.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/system.h
+../includes/functions.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
+../includes/struct_cpu.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_cpu.h
+../includes/struct_disk.h
+/home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_disk.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+dirent.h
+-
+sys/types.h
 -
 
