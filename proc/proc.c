@@ -16,10 +16,11 @@ static const int proc_devices_dir_len = sizeof(PROC_DEVICES_DIR) - 1;
 //struct process_t procs;
 
 #define SIZE 50
+    struct process_t process;
+
 
 void main(int argc, char **argv) {
 
-    struct process_t process;
 
     char fname[128];
 	strcpy(fname, PROC_DEVICES_DIR);
@@ -43,7 +44,7 @@ void main(int argc, char **argv) {
            // printf("%s\n", fname);
 
             //get caracteristics process
-            char Name[50];
+            char Name[50] = {0};
             int Pid, PPid;               
             
             Pid = atoi(proc_ent->d_name);   
@@ -75,9 +76,10 @@ void main(int argc, char **argv) {
                 if(result_Name != NULL){
                     char caract[50], content[50];
                     sscanf(result_Name,"%s %s", caract, content);
-                    //printf("%s\t%s\n", caract, content);    
-                    Name[50] = 'content';
-                }
+                    strcat(Name, content);
+
+                    //printf("%s\t\n",Name);    
+                                    }
                 
                 result_PPid = strstr(line_buf, "PPid");
                 if(result_PPid != NULL){
@@ -104,9 +106,16 @@ void main(int argc, char **argv) {
             printf("------------------FIN----------------------\n");
             printf("\n\n");
 */
-           printf("%s\n", Name);
+            printf("%s\n", Name);
+            //process.name[50] = Name;
             printf("%d\n", Pid);
+            //process.pid = Pid;
+           
+           
             printf("%d\n", PPid);
+            //process.ppid = PPid;
+            
+            printf("--------------\n");
         
     }
     
