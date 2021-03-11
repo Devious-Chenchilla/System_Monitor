@@ -8,11 +8,13 @@ CMakeFiles/aise.dir/src/main.c.o
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_cpu.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_disk.h
+ /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_process.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/system.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/src/main.c
 CMakeFiles/aise.dir/src/system.c.o
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/functions.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_cpu.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_disk.h
+ /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/struct_process.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/includes/system.h
  /home/uvsq/Bureau/Projet_AISE/Monitor-System-aise/src/system.c

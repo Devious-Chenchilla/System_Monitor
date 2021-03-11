@@ -5,6 +5,7 @@
 
 struct cpu_t;
 struct disk_t;
+struct process_t;
 
 /* All the data about the system is stored here */
 struct system_t
@@ -13,13 +14,14 @@ struct system_t
 	struct cpu_t *cpus; /**< All CPUs in the system ordered
 						  by core_id and package_id */
 
+	int process_count; /**<Number of process in the system>*/
+	struct process_t *processes; /**< All process in the system ordred by name >*/
 
 
 	int disk_count; /**< The number of disks (block devices) */
 	struct disk_t *disks; /**< The actual disks in the system */
 	int max_disk_count;
 
-	
 
 	long long ram_used; /**< The ammount of RAM used by applications (bytes) */
 	long long ram_free;

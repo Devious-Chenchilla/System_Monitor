@@ -7,6 +7,7 @@ struct process_t{
     char name[50];
     int pid;
     int ppid;
+  //  int tgid;
 
 };
 

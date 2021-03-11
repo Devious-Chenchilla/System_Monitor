@@ -2,6 +2,8 @@
 #include "../includes/functions.h"
 #include "../includes/struct_cpu.h"
 #include "../includes/struct_disk.h"
+#include "../includes/struct_process.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,21 +93,13 @@ int main(int argc, char **argv)
 	}
 	struct system_t system = system_init();
 
-	
-
-	
-		
-
-
-	
-
 	// Loop forever, show CPU usage and frequency and disk usage
 
 	printf(TERM_CLEAR_SCREEN TERM_POSITION_HOME);
 	for (;;) {
+		
 		system_refresh_info(&system);
-		
-		
+				
 		int max_name_length = 9;
 		for (int i = 0; i < system.disk_count; ++i) {
 			int len = strlen(system.disks[i].name);
@@ -134,7 +128,7 @@ int main(int argc, char **argv)
 				printf(TERM_ERASE_REST_OF_LINE "\n");
 // RAM usage
 		{
-			char used[10], buffers[10], cached[10], free[10], shared[10];
+			char used[10], buffers[10], cached[10]/*, free[10], shared[10]*/;
 			bytes_to_human_readable(system.ram_used, used);
 			bytes_to_human_readable(system.ram_buffers, buffers);
 			bytes_to_human_readable(system.ram_cached, cached);
@@ -143,7 +137,8 @@ int main(int argc, char **argv)
 					"Cached:  %8s\n" TERM_ERASE_REST_OF_LINE,
 					used, buffers, cached);
 		}
-		printf(TERM_ERASE_REST_OF_LINE "\n");
+
+			printf(TERM_ERASE_REST_OF_LINE "\n");
 
 		// Disk usage
 		printf("%-*s        Read       Write\n", max_name_length, "Disk");
@@ -159,19 +154,43 @@ int main(int argc, char **argv)
 			printf("%-*s %9s/s %9s/s" TERM_ERASE_REST_OF_LINE "\n",
 					max_name_length, disk->name, read, write);
 		}
+		printf(TERM_ERASE_REST_OF_LINE "\n");
 		
+		
+		/*printf("pid        ppid\n");
+		for (int z = 0; z < system.process_count; ++z) {
+			const struct process_t *process = &system.processes[z];
+						
+			printf("%d %9d" TERM_ERASE_REST_OF_LINE "\n",
+					process->pid, process->ppid);
+					printf(TERM_ERASE_REST_OF_LINE "\n");
 
-
+		}
+*/
+		
+		
 		printf(TERM_ERASE_REST_OF_LINE
 				TERM_ERASE_DOWN
 				TERM_POSITION_HOME);
+		
+		
+		
+		
 		fflush(stdout);
+
+		
+		
+
+
 
 		int c = wait_for_keypress();
 		if (c == 'q' || c == 'Q' || c == 3 || must_exit)
 			break;
-	}
+	
+			
+		}
 
+			
 
 
 	system_delete(system);

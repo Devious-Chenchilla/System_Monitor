@@ -2,6 +2,7 @@
 #include "../includes/functions.h"
 #include "../includes/struct_cpu.h"
 #include "../includes/struct_disk.h"
+#include "../includes/struct_process.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,22 +11,34 @@
 #include <dirent.h>
 #include <sys/types.h>
 
+#define SIZE 50
+
+
 #define CPU_DEVICES_DIR "/sys/bus/cpu/devices/"
 static const int cpu_devices_dir_len = sizeof(CPU_DEVICES_DIR) - 1;
+
 #define HWMON_DIR "/sys/class/hwmon/"
 static const int hwmon_dir_len = sizeof(HWMON_DIR) - 1;
+
 #define BLOCK_DEVICES_DIR "/sys/block/"
 static const int block_devices_dir_len = sizeof(BLOCK_DEVICES_DIR) - 1;
-#define INTERFACES_DIR "/sys/class/net/"
+
+/*#define INTERFACES_DIR "/sys/class/net/"
 static const int interfaces_dir_len = sizeof(INTERFACES_DIR) - 1;
+
 #define POWER_DIR "/sys/class/power_supply/"
 static const int power_dir_len = sizeof(POWER_DIR) - 1;
+*/
+#define PROC_DEVICES_DIR "/proc/"
+static const int proc_devices_dir_len = sizeof(PROC_DEVICES_DIR) - 1;
+
 #define PROC_STAT_DIR "/proc/stat"
 #define MEMINFO_PATH "/proc/meminfo"
 
 
 static void system_cpu_init(struct system_t *);
 static void system_disk_init(struct system_t *);
+static void system_process_init(struct system_t *);
 
 struct system_t system_init(void)
 {
@@ -36,6 +49,7 @@ struct system_t system_init(void)
 
 	system_cpu_init(&system);
 	system_disk_init(&system);
+	system_process_init(&system);
 
 	system.buffer = NULL;
 	system.buffer_size = 0;
@@ -59,12 +73,14 @@ void system_delete(struct system_t system)
 	free(system.buffer);
 	free(system.cpus);
 	free(system.disks);
+	free(system.processes);
 }
 
 
 static void system_refresh_cpus(struct system_t *system);
 static void system_refresh_ram(struct system_t *system);
 static void system_refresh_disks(struct system_t *system);
+static void system_refresh_process(struct system_t *system);
 
 
 void system_refresh_info(struct system_t *system)
@@ -72,8 +88,10 @@ void system_refresh_info(struct system_t *system)
 	system_refresh_cpus(system);
 	system_refresh_ram(system);
 	system_refresh_disks(system);
+	system_refresh_process(system);
 }
 
+static void system_refresh_process(struct system_t *system){}
 
 // Comparison function for sorting CPUs
 static int cpu_cmp(const void *a, const void *b)
@@ -140,7 +158,7 @@ static void system_cpu_init(struct system_t *system)
 
 		// Add cpu to system.cpus
 		if (cpus_container_size <= system->cpu_count) {
-			cpus_container_size += 64;
+			cpus_container_size += 1;
 			system->cpus = (struct cpu_t *)realloc(system->cpus,
 					sizeof(struct cpu_t) * cpus_container_size);
 		}
@@ -153,12 +171,96 @@ static void system_cpu_init(struct system_t *system)
 			sizeof(struct cpu_t), cpu_cmp);
 }
 
+static void system_process_init(struct system_t *system){
+	system->process_count = 0;
+	system->processes = NULL;
+	int process_container_size = 0;
+
+	char fname[128];
+	strcpy(fname, PROC_DEVICES_DIR);
+    DIR* rep = opendir(PROC_DEVICES_DIR);
+    if(rep == NULL)
+        return;
+	
+    struct dirent *proc_ent;
+	while ((proc_ent = readdir(rep))) {
+        if(atoi(proc_ent->d_name)){
+            //printf("%d\n", atoi(proc_ent->d_name));        
+            struct process_t process;
+
+            // Set fname to /proc/PID
+            strcpy(fname + proc_devices_dir_len, proc_ent->d_name);
+	        int proc_dir_len = proc_devices_dir_len + strlen(proc_ent->d_name);  
+
+    		// Load static PROC parameters
+            strcpy(fname + proc_dir_len, "/status");
+            //get caracteristics process
+            
+            process.pid = atoi(proc_ent->d_name);
+            /* Open the file for reading */
+            char *line_buf = NULL;
+            size_t line_buf_size = 0;
+            int line_count = 0;
+            ssize_t line_size;
+            FILE *fp = fopen(fname, "r");
+            
+			if (!fp)
+        		fprintf(stderr, "Error opening file '%s'\n", fname);
+
+            /* Get the first line of the file. */
+            line_size = getline(&line_buf, &line_buf_size, fp);
+
+            /* Loop through until we are done with the file. */
+            char * result_Name;
+            char * result_PPid;
+            while (line_size >= 0)
+            {
+                
+                /* Increment our line count */
+                line_count++;
+                result_Name = strstr(line_buf, "Name");
+                if(result_Name != NULL){
+                    char caract[50], content[50];
+                    sscanf(result_Name,"%s %s", caract, content);
+                   // strcat(Name, content);
+                    strcpy(process.name, content);
+                                    }
+                
+                result_PPid = strstr(line_buf, "PPid");
+                if(result_PPid != NULL){
+                    char caract[50], content[50];
+                    sscanf(result_PPid,"%s %c", caract, content);
+                    //printf("%s\t%d\n", caract, atoi(content));
+                    //PPid = ;
+                    process.ppid = atoi(content);
+                }
+                          
+
+                /* Get the next line */
+                line_size = getline(&line_buf, &line_buf_size, fp);
+            }
+
+			if(process_container_size <= system->process_count){
+				process_container_size += 1;
+				system->processes = (struct process_t *)realloc(system->processes,
+					sizeof(struct process_t) * process_container_size);	
+			
+					system->processes[system->process_count++] = process;
+			}
+
+		}
+	}
+}
+
+
 static void system_disk_init(struct system_t *system)
 {
 	system->disks = NULL;
 	system->disk_count = 0;
 	system->max_disk_count = 0;
+	
 }
+
 
 
 
@@ -449,7 +551,7 @@ static void system_refresh_disks(struct system_t *system)
 
 			// Allocate memory if necessary
 			if (system->disk_count == system->max_disk_count) {
-				system->max_disk_count += 128;
+				system->max_disk_count += 1;
 				system->disks = (struct disk_t *)realloc(
 						system->disks,
 						sizeof(struct disk_t) * system->max_disk_count);
@@ -515,3 +617,5 @@ static void system_refresh_disks(struct system_t *system)
 	}
 	system->disk_count = i;
 }
+
+
