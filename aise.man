@@ -1,0 +1,26 @@
+.TH AISE 1 "14 Mars 2021"
+
+.SH NOM
+SMON \- Monitor system
+
+.SH SYNOPSIS
+\fBsmon\fP [ -c | -b ] [ -t \fItype\fP ] \fInombre\fP
+
+.SH DESCRIPTION
+SMON affiche les valeurs des indicateurs systeme comme le cpu
+la ram, le disk, les processus en cours d'execution
+.SS Options
+
+.TP
+\fB-local\fP
+executer sur ma machine
+
+.SH FICHIERS
+.TP
+\fC/dev/cf0\fR
+
+.SH "VOIR AUSSI"
+htop(5), to(5), Gnome(5)
+
+.SH BOGUES
+high performance computing
