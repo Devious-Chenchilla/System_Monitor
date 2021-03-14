@@ -3,6 +3,7 @@
 #include "../includes/struct_cpu.h"
 #include "../includes/struct_disk.h"
 
+#include "../includes/rdtsc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -149,7 +150,8 @@ for (int i = 1; i < argc; ++i) {
 				// Loop forever, show CPU usage and frequency and disk usage
 			//-------------------------------------------------------------------------------------
 			for (;;) {
-					fp1 = fopen(filename, "w");
+				int before = rdtsc();
+			fp1 = fopen(filename, "w");
 			if (fp1== NULL) {
 				perror("[-]Error in writing file.");
 				exit(1);
@@ -183,18 +185,20 @@ for (int i = 1; i < argc; ++i) {
 					}
 			// RAM usage
 					{
-						char used[10], buffers[10], cached[10], total[10];
-						bytes_to_human_readable(system.ram_used, used);
-						bytes_to_human_readable(system.ram_buffers, buffers);
-						bytes_to_human_readable(system.ram_cached, cached);
-						bytes_to_human_readable(system.ram_total, total);
+						    char used[10], buffers[10], cached[10], total[10], free[10];
+							bytes_to_human_readable(system.ram_used, used);
+							bytes_to_human_readable(system.ram_buffers, buffers);
+							bytes_to_human_readable(system.ram_cached, cached);
+							bytes_to_human_readable(system.ram_total, total);
+							bytes_to_human_readable(system.ram_free, free);
 
-						fprintf(fp1, "Used:    %8s\n" 
-								"total:   %8s\n" 
-								"Buffers: %8s\n" 
-								"Cached:  %8s\n" ,	
-								
-								used, total, buffers, cached);
+						fprintf(fp1, "Total:  %8s\n" TERM_ERASE_REST_OF_LINE
+ 									"Used:    %8s\n" TERM_ERASE_REST_OF_LINE
+									"Free:  %8s\n" TERM_ERASE_REST_OF_LINE
+									"Buffers: %8s\n" TERM_ERASE_REST_OF_LINE
+									"Cached:  %8s\n" TERM_ERASE_REST_OF_LINE,
+
+									total, used, free, buffers, cached);
 					}
 
 
@@ -214,8 +218,7 @@ for (int i = 1; i < argc; ++i) {
 				
 					
 					
-					fprintf(fp1,"tid\tpid\tcommand");
-											// fillarg used for cmdline
+						fprintf(fp1,"\ntid\tppid\tmem\tcpu\tstat\tcommand\n\n");											// fillarg used for cmdline
 						// fillstat used for cmd
 						PROCTAB* proc = openproc(PROC_FILLARG | PROC_FILLSTAT);
 
@@ -225,10 +228,10 @@ for (int i = 1; i < argc; ++i) {
 						memset(&proc_info, 0, sizeof(proc_info));
 
 						while (readproc(proc, &proc_info) != NULL) {
-						fprintf(fp1,"%d\t%d\t", proc_info.tid, proc_info.ppid);
+						fprintf(fp1,"%d\t%d\t%lu\t%d\t%c\t", proc_info.tid, proc_info.ppid, proc_info.vm_size, proc_info.pcpu,proc_info.state);
 						if (proc_info.cmdline != NULL) {
 						// print full cmd line if available
-						fprintf(fp1,"%s\n", *proc_info.cmdline);
+						fprintf(fp1,"[%s]\n", proc_info.cmd);
 						} else {
 						// if no cmd line use executable filename 
 						fprintf(fp1,"[%s]\n", proc_info.cmd);
@@ -269,6 +272,9 @@ for (int i = 1; i < argc; ++i) {
 
 									
 					}
+					int after = rdtsc();
+							printf("temps ecoulé %d", after - before);
+						
 					}
 								close(sockfd);
 
@@ -285,6 +291,7 @@ for (int i = 1; i < argc; ++i) {
 						sigaction(SIGTERM, &action, NULL);
 					}
 								// Loop forever, show CPU usage and frequency and disk usage
+					int before = rdtsc();
 					printf(TERM_CLEAR_SCREEN TERM_POSITION_HOME);
 					for (;;) {
 					
@@ -322,14 +329,20 @@ for (int i = 1; i < argc; ++i) {
 
 						// RAM usage
 						{
-							char used[10], buffers[10], cached[10];
+							char used[10], buffers[10], cached[10], total[10], free[10];
 							bytes_to_human_readable(system.ram_used, used);
 							bytes_to_human_readable(system.ram_buffers, buffers);
 							bytes_to_human_readable(system.ram_cached, cached);
-							printf( "Used:    %8s\n" TERM_ERASE_REST_OF_LINE
+							bytes_to_human_readable(system.ram_total, total);
+							bytes_to_human_readable(system.ram_free, free);
+
+							printf( "Total:   %8s\n" TERM_ERASE_REST_OF_LINE
+ 									"Used:    %8s\n" TERM_ERASE_REST_OF_LINE
+									"Free:    %8s\n" TERM_ERASE_REST_OF_LINE
 									"Buffers: %8s\n" TERM_ERASE_REST_OF_LINE
 									"Cached:  %8s\n" TERM_ERASE_REST_OF_LINE,
-									used, buffers, cached);
+
+									total, used, free, buffers, cached);
 						}
 						printf(TERM_ERASE_REST_OF_LINE "\n");
 
@@ -346,25 +359,53 @@ for (int i = 1; i < argc; ++i) {
 
 							printf("%-*s %9s/s %9s/s" TERM_ERASE_REST_OF_LINE "\n",
 									max_name_length, disk->name, read, write);
+									printf("\n\n\n\n");
 						}
 
 						printf(TERM_ERASE_REST_OF_LINE "\n");
 						
-
 						
 
 						printf(TERM_ERASE_REST_OF_LINE
 								TERM_ERASE_DOWN
-								TERM_POSITION_HOME);
+								TERM_POSITION_HOME"\n");
 						fflush(stdout);
 
 						int c = wait_for_keypress();
-						if (c == 'q' || c == 'Q' || c == 3 || must_exit)
-							break;
+						if (c == 'q' || c == 'Q' || c == 3 || must_exit){
+							printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+							printf("\ntid\tppid\tmem\tcpu\tstat\tcommand\n\n");
+												// fillarg used for cmdline
+							// fillstat used for cmd
+							PROCTAB* proc = openproc(PROC_FILLARG | PROC_FILLSTAT);
+
+							proc_t proc_info;
+
+							// zero out the allocated proc_info memory
+							memset(&proc_info, 0, sizeof(proc_info));
+
+							while (readproc(proc, &proc_info) != NULL) {
+							printf("%d\t%d\t%lu\t%d\t%c\t", proc_info.tid, proc_info.ppid, proc_info.vm_size, proc_info.pcpu,proc_info.state);
+							if (proc_info.cmdline != NULL) {
+							// print full cmd line if available
+							printf("[%s]\n", proc_info.cmd);
+							} else {
+							// if no cmd line use executable filename 
+							printf("[%s]\n", proc_info.cmd);
+							}
+							}
+
+							closeproc(proc);
+								
+								break;
+					}
 					}
 
 
 					system_delete(system);
+															int after = rdtsc();
+							printf("temps ecoulé %d", after - before);
+
 							return 0;
 
 		}

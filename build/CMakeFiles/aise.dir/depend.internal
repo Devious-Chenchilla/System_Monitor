@@ -6,6 +6,7 @@ CMakeFiles/aise.dir/src/functions.c.o
  /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/src/functions.c
 CMakeFiles/aise.dir/src/main.c.o
  /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/functions.h
+ /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/rdtsc.h
  /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_cpu.h
  /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_disk.h
  /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/system.h

@@ -57,12 +57,15 @@ int main(){
     if (n <= 0){
       break;
    }
-    fprintf(fp, buffer_rec);
+   // fprintf(fp, buffer_rec);
+fputs(buffer_rec, stdout);
+     
     bzero(buffer_rec, SIZE);
   } 
 
 
   printf("[+]Data written in the file successfully.\n");
+
 
 
   return 0;

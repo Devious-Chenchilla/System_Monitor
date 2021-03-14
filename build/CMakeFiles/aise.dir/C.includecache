@@ -8,13 +8,15 @@
 
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/functions.h
 
+/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/rdtsc.h
+
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_cpu.h
 
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_disk.h
 
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/system.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/src/system.c
+/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/src/main.c
 ../includes/system.h
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/system.h
 ../includes/functions.h
@@ -23,6 +25,8 @@
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_cpu.h
 ../includes/struct_disk.h
 /home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_disk.h
+../includes/rdtsc.h
+/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/rdtsc.h
 stdio.h
 -
 stdlib.h
@@ -31,8 +35,16 @@ string.h
 -
 unistd.h
 -
-dirent.h
+sys/select.h
 -
-sys/types.h
+termios.h
+-
+signal.h
+-
+proc/readproc.h
+-
+proc/readproc.h
+-
+arpa/inet.h
 -
 

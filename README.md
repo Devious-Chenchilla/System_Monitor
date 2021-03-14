@@ -21,14 +21,14 @@ If you want to execute this prog in you're terminal
 ```
 ./aise -local
 ```
+Then click on 'q' or 'Q'
+
 If you want to execute in distance
 ```
 ./aise -send
+
 ```
-
-
-
-
+Then click on 'q' or 'Q'
 ## Intalling 
 after building the project Monitor-System, you can install it 
 ```
