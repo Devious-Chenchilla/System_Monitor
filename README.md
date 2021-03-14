@@ -26,8 +26,13 @@ If you want to execute this prog in you're terminal
 ./aise -local
 ```
 Then click on 'q' or 'Q'
-
+--------------------------------------------------------------
 If you want to execute in distance
+1- Open server 
+```
+gcc server.c -o server | ./server
+```
+after 
 ```
 ./aise -send
 
