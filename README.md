@@ -55,3 +55,4 @@ sudo make install
 
     - add Battery, interfaces, ...
     - ncurses or gtk interface 
+    - extract data in json format at a given time
