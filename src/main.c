@@ -84,7 +84,7 @@ void signal_handler(int signum)
 
 
 
-#define SIZE 1024
+#define SIZE 5000
 
 void send_file(FILE *fp, int sockfd){
   //int n;
@@ -374,7 +374,7 @@ for (int i = 1; i < argc; ++i) {
 						int c = wait_for_keypress();
 						if (c == 'q' || c == 'Q' || c == 3 || must_exit){
 							printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-							printf("\ntid\tppid\tmem\tcpu\tstat\tcommand\n\n");
+							printf("\ntid\tppid\tmem\tcpu\tprocID\tstat\tcommand\n\n");
 												// fillarg used for cmdline
 							// fillstat used for cmd
 							PROCTAB* proc = openproc(PROC_FILLARG | PROC_FILLSTAT);
@@ -383,9 +383,9 @@ for (int i = 1; i < argc; ++i) {
 
 							// zero out the allocated proc_info memory
 							memset(&proc_info, 0, sizeof(proc_info));
-
+							char pourc = '%';
 							while (readproc(proc, &proc_info) != NULL) {
-							printf("%d\t%d\t%lu\t%d\t%c\t", proc_info.tid, proc_info.ppid, proc_info.vm_size, proc_info.pcpu,proc_info.state);
+							printf("%d\t%d\t%lu\t%d%c\t%d\t%c\t", proc_info.tid, proc_info.ppid, proc_info.vm_size, proc_info.pcpu,pourc,proc_info.processor,proc_info.state);
 							if (proc_info.cmdline != NULL) {
 							// print full cmd line if available
 							printf("[%s]\n", proc_info.cmd);

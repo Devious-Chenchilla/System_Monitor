@@ -2,11 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
-#define SIZE 1024
+#define SIZE 5000
 
-void write_file(int sockfd){
-  
-}
 
 int main(){
   char *ip = "127.0.0.1";
@@ -45,22 +42,17 @@ int main(){
 
   addr_size = sizeof(new_addr);
   new_sock = accept(sockfd, (struct sockaddr*)&new_addr, &addr_size);
-  
   int n;
-  FILE *fp;
-  char *filename = "recv.txt";
   char buffer_rec[SIZE];
 
-  fp = fopen(filename, "w");
  while (1) {
     n = recv(new_sock, buffer_rec, SIZE, 0);
     if (n <= 0){
       break;
    }
    // fprintf(fp, buffer_rec);
-fputs(buffer_rec, stdout);
+  fputs(buffer_rec, stdout);
      
-    bzero(buffer_rec, SIZE);
   } 
 
 

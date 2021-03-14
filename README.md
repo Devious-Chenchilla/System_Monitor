@@ -7,7 +7,11 @@ The SYSTEM Monitor utility allows you to accurately view the usage of CPU, memor
 ## Caracéristiques implémentées
 With this Monitor, you can view this stats : 
  - Usage, Frequency and processor temperature
+ - Ram : total, used, free, cached, buffer
  - Disk Usage "READ/WRITE"
+ - Help & organisation of arguments
+ - Socket send/recv
+
 
 ## Building
 ```
