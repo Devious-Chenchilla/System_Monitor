@@ -1,6 +1,8 @@
 <img src="mon.jpg" align="right" />
 
-# Monitor-System
+
+
+# Monitor-System 
 
 The SYSTEM Monitor utility allows you to accurately view the usage of CPU, memory, hard drive, and network connection. 
  
@@ -48,3 +50,7 @@ after building the project Monitor-System, you can install it
 sudo make install
 ```
  
+## Perspectives 
+
+    - add Battery, interfaces, ...
+    - ncurses or gtk interface 
