@@ -17,6 +17,12 @@ cd build
 cmake ..
 make
 ```
+If you want to execute this prog in you're terminal
+```
+./aise -local
+```
+
+
 ## Intalling 
 after building the project Monitor-System, you can install it 
 ```
