@@ -7,7 +7,7 @@ The SYSTEM Monitor utility allows you to accurately view the usage of CPU, memor
 ## Caracéristiques implémentées
 With this Monitor, you can view this stats : 
  - Usage, Frequency and processor temperature
- - Disk Usage	
+ - Disk Usage "READ/WRITE"
 
 ## Building
 ```
@@ -21,6 +21,12 @@ If you want to execute this prog in you're terminal
 ```
 ./aise -local
 ```
+If you want to execute in distance
+```
+./aise -send
+```
+
+
 
 
 ## Intalling 
