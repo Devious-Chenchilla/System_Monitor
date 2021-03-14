@@ -12,6 +12,10 @@ With this Monitor, you can view this stats :
  - Help & organisation of arguments
  - Socket send/recv
 
+if you need a help : after compiling
+```
+./aise -h or ./aise -help
+```
 
 ## Building
 ```
