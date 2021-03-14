@@ -1,0 +1,14 @@
+CPU 1 :  900 MHz   0% usage  34C
+CPU 2 :  900 MHz   0% usage
+CPU 3 :  900 MHz   0% usage  34C
+CPU 4 :  900 MHz   0% usage
+CPU 5 :  900 MHz   0% usage  36C
+CPU 6 :  900 MHz   0% usage
+CPU 7 :  900 MHz   0% usage  35C
+CPU 8 :  900 MHz   0% usage
+Used:      5.4GiB
+total:     7.6GiB
+Buffers:  91.5MiB
+Cached:    1.2GiB
+Disk             Read       Write
+nvme0n1      0.0  B/s    0.0  B/s

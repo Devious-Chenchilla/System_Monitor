@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = 
 
-C_FLAGS =  -Wall -std=gnu99
+C_FLAGS =  -Wall -g -std=gnu99
 

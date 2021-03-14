@@ -14,8 +14,8 @@ struct system_t
 	struct cpu_t *cpus; /**< All CPUs in the system ordered
 						  by core_id and package_id */
 
-	int process_count; /**<Number of process in the system>*/
-	struct process_t *processes; /**< All process in the system ordred by name >*/
+	//int process_count; /**<Number of process in the system>*/
+	//struct process_t *processes; /**< All process in the system ordred by name >*/
 
 
 	int disk_count; /**< The number of disks (block devices) */
@@ -28,7 +28,7 @@ struct system_t
 	long long ram_shared;
 	long long ram_buffers; /**< The ammount of RAM used as buffers (bytes) */
 	long long ram_cached; /**< THe ammount of RAM used for caches (bytes) */
-
+	long long ram_total;
 
 	// File descriptors for files that are kept open
 	int proc_stat_fd;

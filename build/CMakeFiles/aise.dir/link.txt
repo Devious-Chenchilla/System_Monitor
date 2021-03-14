@@ -1,1 +1,1 @@
-/usr/bin/cc  -Wall -rdynamic CMakeFiles/aise.dir/src/main.c.o CMakeFiles/aise.dir/src/system.c.o CMakeFiles/aise.dir/src/functions.c.o -o aise 
+/usr/bin/cc  -Wall -g -lprocps -rdynamic CMakeFiles/aise.dir/src/main.c.o CMakeFiles/aise.dir/src/system.c.o CMakeFiles/aise.dir/src/functions.c.o -o aise 

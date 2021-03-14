@@ -2,7 +2,6 @@
 #include "../includes/functions.h"
 #include "../includes/struct_cpu.h"
 #include "../includes/struct_disk.h"
-#include "../includes/struct_process.h"
 
 
 #include <stdio.h>
@@ -12,6 +11,9 @@
 #include <sys/select.h>
 #include <termios.h>
 #include <signal.h>
+#include <proc/readproc.h>
+#include <proc/readproc.h>
+#include <arpa/inet.h>
 
 #define TERM_CLEAR_SCREEN "\e[2J"
 #define TERM_POSITION_HOME "\e[H"
@@ -81,7 +83,22 @@ void signal_handler(int signum)
 
 
 
+#define SIZE 1024
 
+void send_file(FILE *fp, int sockfd){
+  //int n;
+  char data[SIZE] = {0};
+
+  while(fgets(data, SIZE, fp) != NULL) {
+    if (send(sockfd, data, sizeof(data), 0) == -1) {
+      perror("[-]Error in sending file.");
+      exit(1);
+    }
+    bzero(data, SIZE);
+  }
+}
+
+//------------------------------------------------------------------------------------**
 int main(int argc, char **argv)
 {
 	// Catch SIGTERM
@@ -93,107 +110,274 @@ int main(int argc, char **argv)
 	}
 	struct system_t system = system_init();
 
-	// Loop forever, show CPU usage and frequency and disk usage
+//-----------------------------------------------------HELP ARGV ++ -------------------
+for (int i = 1; i < argc; ++i) {
+		const char *arg = argv[i];
+		if (!strcmp(arg, "-h") || !strcmp(arg, "--help")) {
+			printf(
+					"-h --help    Print this help message\n"
+					"-local	      execute programme in my terminal\n"
+					"implement : \n"
+					"    |cpuX{usage,temp,freq}\n"
+					"    |ram_{used,buffers,cached}\n"
+					"    |disk_NAME_{read,write}\n"
+					);
+			return 0;
+		} else if (!strcmp(arg, "-send") || !strcmp(arg, "127.0.0.1")) {
+			char *ip = "127.0.0.1";
+			int port = 8080;
+			int e;
 
-	printf(TERM_CLEAR_SCREEN TERM_POSITION_HOME);
-	for (;;) {
-		
-		system_refresh_info(&system);
-				
-		int max_name_length = 9;
-		for (int i = 0; i < system.disk_count; ++i) {
-			int len = strlen(system.disks[i].name);
-			if (len > max_name_length)
-				max_name_length = len;
-		}
+			int sockfd;
+			struct sockaddr_in server_addr;
+			FILE *fp, *fp1;
+			char *filename = "../build/send.txt";
 
-		// CPU frequency and usage
-		for (int c = 0; c < system.cpu_count; ++c) {
-			const struct cpu_t *cpu = &system.cpus[c];
-			if (c == 0 || cpu->core_id != system.cpus[c - 1].core_id) {
-				// CPU info with temperature
-				printf("CPU %d : %4d MHz %3d%% usage %3dC\n",
-						c + 1,
-						cpu->cur_freq / 1000,
-						(int)(cpu->total_usage * 100),
-						cpu->cur_temp / 1000);
-			} else {
-				// CPU info without temperature
-				printf("CPU %d : %4d MHz %3d%% usage\n",
-						c + 1,
-						cpu->cur_freq / 1000,
-						(int)(cpu->total_usage * 100));
+			sockfd = socket(AF_INET, SOCK_STREAM, 0);
+			if(sockfd < 0) {
+				perror("[-]Error in socket");
+				exit(1);
 			}
-		}
-				printf(TERM_ERASE_REST_OF_LINE "\n");
-// RAM usage
-		{
-			char used[10], buffers[10], cached[10]/*, free[10], shared[10]*/;
-			bytes_to_human_readable(system.ram_used, used);
-			bytes_to_human_readable(system.ram_buffers, buffers);
-			bytes_to_human_readable(system.ram_cached, cached);
-			printf( "Used:    %8s\n" TERM_ERASE_REST_OF_LINE
-					"Buffers: %8s\n" TERM_ERASE_REST_OF_LINE
-					"Cached:  %8s\n" TERM_ERASE_REST_OF_LINE,
-					used, buffers, cached);
-		}
+			printf("[+]Server socket created successfully.\n");
 
-			printf(TERM_ERASE_REST_OF_LINE "\n");
+			server_addr.sin_family = AF_INET;
+			server_addr.sin_port = port;
+			server_addr.sin_addr.s_addr = inet_addr(ip);
 
-		// Disk usage
-		printf("%-*s        Read       Write\n", max_name_length, "Disk");
-		for (int d = 0; d < system.disk_count; ++d) {
-			const struct disk_t *disk = &system.disks[d];
-			char read[10], write[10];
-			// TODO: find a way to check actual sector size
-			bytes_to_human_readable(
-					disk->stats_delta[DISK_READ_SECTORS] * 512, read);
-			bytes_to_human_readable(
-					disk->stats_delta[DISK_WRITE_SECTORS] * 512, write);
+			
 
-			printf("%-*s %9s/s %9s/s" TERM_ERASE_REST_OF_LINE "\n",
-					max_name_length, disk->name, read, write);
-		}
-		printf(TERM_ERASE_REST_OF_LINE "\n");
-		
-		
-		/*printf("pid        ppid\n");
-		for (int z = 0; z < system.process_count; ++z) {
-			const struct process_t *process = &system.processes[z];
+				// Loop forever, show CPU usage and frequency and disk usage
+			//-------------------------------------------------------------------------------------
+			for (;;) {
+					fp1 = fopen(filename, "w");
+			if (fp1== NULL) {
+				perror("[-]Error in writing file.");
+				exit(1);
+			}
+					system_refresh_info(&system);
+							
+					int max_name_length = 9;
+					for (int i = 0; i < system.disk_count; ++i) {
+						int len = strlen(system.disks[i].name);
+						if (len > max_name_length)
+							max_name_length = len;
+					}
+
+					// CPU frequency and usage
+					for (int c = 0; c < system.cpu_count; ++c) {
+						const struct cpu_t *cpu = &system.cpus[c];
+						if (c == 0 || cpu->core_id != system.cpus[c - 1].core_id) {
+							// CPU info with temperature
+							fprintf(fp1,"CPU %d : %4d MHz %3d%% usage %3dC\n",
+									c + 1,
+									cpu->cur_freq / 1000,
+									(int)(cpu->total_usage * 100),
+									cpu->cur_temp / 1000);
+						} else {
+							// CPU info without temperature
+							fprintf(fp1,"CPU %d : %4d MHz %3d%% usage\n",
+									c + 1,
+									cpu->cur_freq / 1000,
+									(int)(cpu->total_usage * 100));
+						}
+					}
+			// RAM usage
+					{
+						char used[10], buffers[10], cached[10], total[10];
+						bytes_to_human_readable(system.ram_used, used);
+						bytes_to_human_readable(system.ram_buffers, buffers);
+						bytes_to_human_readable(system.ram_cached, cached);
+						bytes_to_human_readable(system.ram_total, total);
+
+						fprintf(fp1, "Used:    %8s\n" 
+								"total:   %8s\n" 
+								"Buffers: %8s\n" 
+								"Cached:  %8s\n" ,	
+								
+								used, total, buffers, cached);
+					}
+
+
+					// Disk usage
+					fprintf(fp1,"%-*s        Read       Write\n", max_name_length, "Disk");
+						int d = 0;
+						const struct disk_t *disk = &system.disks[d];
+						char read[10], write[10];
+						// TODO: find a way to check actual sector size
+						bytes_to_human_readable(
+								disk->stats_delta[DISK_READ_SECTORS] * 512, read);
+						bytes_to_human_readable(
+								disk->stats_delta[DISK_WRITE_SECTORS] * 512, write);
+
+						fprintf(fp1,"%-*s %9s/s %9s/s\n",
+								max_name_length, disk->name, read, write);
+				
+					
+					
+					fprintf(fp1,"tid\tpid\tcommand");
+											// fillarg used for cmdline
+						// fillstat used for cmd
+						PROCTAB* proc = openproc(PROC_FILLARG | PROC_FILLSTAT);
+
+						proc_t proc_info;
+
+						// zero out the allocated proc_info memory
+						memset(&proc_info, 0, sizeof(proc_info));
+
+						while (readproc(proc, &proc_info) != NULL) {
+						fprintf(fp1,"%d\t%d\t", proc_info.tid, proc_info.ppid);
+						if (proc_info.cmdline != NULL) {
+						// print full cmd line if available
+						fprintf(fp1,"%s\n", *proc_info.cmdline);
+						} else {
+						// if no cmd line use executable filename 
+						fprintf(fp1,"[%s]\n", proc_info.cmd);
+						}
+						}
+
+						closeproc(proc);
 						
-			printf("%d %9d" TERM_ERASE_REST_OF_LINE "\n",
-					process->pid, process->ppid);
-					printf(TERM_ERASE_REST_OF_LINE "\n");
+					// fillarg used for cmdline
+
+
+					//fflush(stdout);
+					
+			//-----------------------------*$$$$
+
+					int c = wait_for_keypress();
+					if (c == 'q' || c == 'Q' || c == 3 || must_exit){
+						fclose(fp1);
+							e = connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr));
+							if(e == -1) {
+								perror("[-]Error in socket");
+								exit(1);
+							}
+								printf("[+]Connected to Server.\n");
+
+							fp = fopen(filename, "r");
+							if (fp == NULL) {
+								perror("[-]Error in reading file.");
+								exit(1);
+							}
+
+							send_file(fp, sockfd);
+							printf("[+]File data sent successfully.\n");
+
+								printf("[+]Closing the connection.\n");
+
+							break;
+
+									
+					}
+					}
+								close(sockfd);
+
+										system_delete(system);
+						
+						return 0;
+		} else if (!strcmp(arg, "-local")) {
+
+					// Catch SIGTERM
+					{
+						struct sigaction action;
+						memset(&action, 0, sizeof(struct sigaction));
+						action.sa_handler = signal_handler;
+						sigaction(SIGTERM, &action, NULL);
+					}
+								// Loop forever, show CPU usage and frequency and disk usage
+					printf(TERM_CLEAR_SCREEN TERM_POSITION_HOME);
+					for (;;) {
+					
+						system_refresh_info(&system);
+
+						int max_name_length = 9;
+						for (int i = 0; i < system.disk_count; ++i) {
+							int len = strlen(system.disks[i].name);
+							if (len > max_name_length)
+								max_name_length = len;
+						}
+						
+
+						// CPU frequency and usage
+						for (int c = 0; c < system.cpu_count; ++c) {
+							const struct cpu_t *cpu = &system.cpus[c];
+							if (c == 0 || cpu->core_id != system.cpus[c - 1].core_id) {
+								// CPU info with temperature
+								printf("CPU %d : %4d MHz %3d%% usage %3dC"
+										TERM_ERASE_REST_OF_LINE "\n",
+										c + 1,
+										cpu->cur_freq / 1000,
+										(int)(cpu->total_usage * 100),
+										cpu->cur_temp / 1000);
+							} else {
+								// CPU info without temperature
+								printf("CPU %d : %4d MHz %3d%% usage"
+										TERM_ERASE_REST_OF_LINE "\n",
+										c + 1,
+										cpu->cur_freq / 1000,
+										(int)(cpu->total_usage * 100));
+							}
+						}
+						printf(TERM_ERASE_REST_OF_LINE "\n");
+
+						// RAM usage
+						{
+							char used[10], buffers[10], cached[10];
+							bytes_to_human_readable(system.ram_used, used);
+							bytes_to_human_readable(system.ram_buffers, buffers);
+							bytes_to_human_readable(system.ram_cached, cached);
+							printf( "Used:    %8s\n" TERM_ERASE_REST_OF_LINE
+									"Buffers: %8s\n" TERM_ERASE_REST_OF_LINE
+									"Cached:  %8s\n" TERM_ERASE_REST_OF_LINE,
+									used, buffers, cached);
+						}
+						printf(TERM_ERASE_REST_OF_LINE "\n");
+
+						// Disk usage
+						printf("%-*s        Read       Write\n", max_name_length, "Disk");
+						for (int d = 0; d < system.disk_count; ++d) {
+							const struct disk_t *disk = &system.disks[d];
+							char read[10], write[10];
+							// TODO: find a way to check actual sector size
+							bytes_to_human_readable(
+									disk->stats_delta[DISK_READ_SECTORS] * 512, read);
+							bytes_to_human_readable(
+									disk->stats_delta[DISK_WRITE_SECTORS] * 512, write);
+
+							printf("%-*s %9s/s %9s/s" TERM_ERASE_REST_OF_LINE "\n",
+									max_name_length, disk->name, read, write);
+						}
+
+						printf(TERM_ERASE_REST_OF_LINE "\n");
+						
+
+						
+
+						printf(TERM_ERASE_REST_OF_LINE
+								TERM_ERASE_DOWN
+								TERM_POSITION_HOME);
+						fflush(stdout);
+
+						int c = wait_for_keypress();
+						if (c == 'q' || c == 'Q' || c == 3 || must_exit)
+							break;
+					}
+
+
+					system_delete(system);
+							return 0;
 
 		}
-*/
-		
-		
-		printf(TERM_ERASE_REST_OF_LINE
-				TERM_ERASE_DOWN
-				TERM_POSITION_HOME);
-		
-		
-		
-		
-		fflush(stdout);
-
-		
-		
+}
 
 
 
-		int c = wait_for_keypress();
-		if (c == 'q' || c == 'Q' || c == 3 || must_exit)
-			break;
+
+
+//------------------------------------------------------socket-------------------------
+
+  
+
 	
-			
-		}
-
-			
-
-
-	system_delete(system);
-	return 0;
 
 }
