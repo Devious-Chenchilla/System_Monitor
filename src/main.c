@@ -21,6 +21,8 @@
 #define TERM_ERASE_REST_OF_LINE "\e[K"
 #define TERM_ERASE_DOWN "\e[J"
 
+#define SIZE 5000
+
 
 static struct termios orig_termios;
 
@@ -84,7 +86,6 @@ void signal_handler(int signum)
 
 
 
-#define SIZE 5000
 
 void send_file(FILE *fp, int sockfd){
   //int n;
@@ -116,12 +117,14 @@ for (int i = 1; i < argc; ++i) {
 		const char *arg = argv[i];
 		if (!strcmp(arg, "-h") || !strcmp(arg, "--help")) {
 			printf(
-					"-h --help    Print this help message\n"
-					"-local	      execute programme in my terminal\n"
+					"-h --help    		Print this help message\n"
+					"-local	      	    execute programme in my terminal\n"
+					"-send : 127.0.0.1	execute programme in my terminal\n"
+
 					"implement : \n"
-					"    |cpuX{usage,temp,freq}\n"
-					"    |ram_{used,buffers,cached}\n"
-					"    |disk_NAME_{read,write}\n"
+					"    | cpuX{usage,temp,freq}     |\n"	  
+					"    | ram_{used,buffers,cached} |\n"
+					"    | disk_NAME_{read,write}    |\n"
 					);
 			return 0;
 		} else if (!strcmp(arg, "-send") || !strcmp(arg, "127.0.0.1")) {
@@ -140,7 +143,7 @@ for (int i = 1; i < argc; ++i) {
 				exit(1);
 			}
 			printf("[+]Server socket created successfully.\n");
-
+			printf("\n** waiting for the green light to send the data \n");
 			server_addr.sin_family = AF_INET;
 			server_addr.sin_port = port;
 			server_addr.sin_addr.s_addr = inet_addr(ip);
@@ -404,7 +407,7 @@ for (int i = 1; i < argc; ++i) {
 
 					system_delete(system);
 															int after = rdtsc();
-							printf("temps ecoulé %d", after - before);
+							printf("temps ecoulé %d cycles", after - before);
 
 							return 0;
 

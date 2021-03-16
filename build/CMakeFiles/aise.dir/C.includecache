@@ -6,27 +6,43 @@
 
 #IncludeRegexTransform: 
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/functions.h
+/home/uvsq/Bureau/system/System_Monitor/includes/functions.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/rdtsc.h
+/home/uvsq/Bureau/system/System_Monitor/includes/rdtsc.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_cpu.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_cpu.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_disk.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_disk.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/system.h
+/home/uvsq/Bureau/system/System_Monitor/includes/system.h
 
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/src/main.c
-../includes/system.h
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/system.h
+/home/uvsq/Bureau/system/System_Monitor/src/functions.c
 ../includes/functions.h
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/functions.h
+/home/uvsq/Bureau/system/System_Monitor/includes/functions.h
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+
+/home/uvsq/Bureau/system/System_Monitor/src/main.c
+../includes/system.h
+/home/uvsq/Bureau/system/System_Monitor/includes/system.h
+../includes/functions.h
+/home/uvsq/Bureau/system/System_Monitor/includes/functions.h
 ../includes/struct_cpu.h
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_cpu.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_cpu.h
 ../includes/struct_disk.h
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/struct_disk.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_disk.h
 ../includes/rdtsc.h
-/home/uvsq/Bureau/Projet 2/Monitor-System-aise1*/includes/rdtsc.h
+/home/uvsq/Bureau/system/System_Monitor/includes/rdtsc.h
 stdio.h
 -
 stdlib.h
@@ -46,5 +62,27 @@ proc/readproc.h
 proc/readproc.h
 -
 arpa/inet.h
+-
+
+/home/uvsq/Bureau/system/System_Monitor/src/system.c
+../includes/system.h
+/home/uvsq/Bureau/system/System_Monitor/includes/system.h
+../includes/functions.h
+/home/uvsq/Bureau/system/System_Monitor/includes/functions.h
+../includes/struct_cpu.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_cpu.h
+../includes/struct_disk.h
+/home/uvsq/Bureau/system/System_Monitor/includes/struct_disk.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+dirent.h
+-
+sys/types.h
 -
 

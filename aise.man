@@ -1,10 +1,10 @@
 .TH AISE 1 "14 Mars 2021"
 
 .SH NOM
-SMON \- Monitor system
+AISE \- Monitor system
 
 .SH SYNOPSIS
-\fBsmon\fP [ -c | -b ] [ -t \fItype\fP ] \fInombre\fP
+\fBsmon\fP [ -h | --help ] [ -local \f exec\fP ] [ -send \f exec ] \fInombre\fP
 
 .SH DESCRIPTION
 SMON affiche les valeurs des indicateurs systeme comme le cpu
@@ -20,7 +20,7 @@ executer sur ma machine
 \fC/dev/cf0\fR
 
 .SH "VOIR AUSSI"
-htop(5), to(5), Gnome(5)
+htop(5), top(5), Gnome(5)
 
 .SH BOGUES
 high performance computing

@@ -230,7 +230,7 @@ static void system_refresh_cpus(struct system_t *system)
 			}
 		}
 
-		// Calculate the cpu usage
+		//Calculate the cpu usage
 
 		int stats[CPU_STATS_COUNT];
 		for (int t = 0; t < CPU_STATS_COUNT; ++t) {
